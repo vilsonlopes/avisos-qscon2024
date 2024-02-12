@@ -13,7 +13,7 @@ url = "https://www.convocacaotemporarios.fab.mil.br/candidato/index.php"
 # Configurações iniciais
 # option = Options()
 # option.headless = True   # Deixar true em produção
-driver = webdriver.Firefox()
+driver = webdriver.Chrome()
 driver.implicitly_wait(80)  # seconds
 driver.get(url)
 # driver.maximize_window()
