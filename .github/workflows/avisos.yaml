@@ -5,6 +5,10 @@ on:
    schedule:
 #     - cron: '0 13 * * *'
      - cron:
+
+env:
+  email_password: ${{ secrets.EMAIL_PASSWORD }}
+
 jobs:
   run_schedule:
 #    runs-on: ubuntu-latest
