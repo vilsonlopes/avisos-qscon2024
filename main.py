@@ -11,9 +11,9 @@ from alertaemail import send_mail
 url = "https://www.convocacaotemporarios.fab.mil.br/candidato/index.php"
 
 # Configurações iniciais
-# option = Options()
-# option.headless = True   # Deixar true em produção
-driver = webdriver.Chrome()
+option = Options()
+option.headless = False   # Deixar true em produção
+driver = webdriver.Firefox(options=option)
 driver.implicitly_wait(80)  # seconds
 driver.get(url)
 # driver.maximize_window()
