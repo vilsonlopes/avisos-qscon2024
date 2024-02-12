@@ -10,7 +10,7 @@ load_dotenv()
 def send_mail():
 
     email_address = 'buscadorcaixa@gmail.com'
-    email_password = '${{ secrets.EMAIL_PASSWORD }}'#os.getenv('EMAIL_PASSWORD')
+    email_password = ${{ secrets.EMAIL_PASSWORD }} #os.getenv('EMAIL_PASSWORD')
 
     contacts = ["vilsonlopes@yahoo.com.br"]
 
