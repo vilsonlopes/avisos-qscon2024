@@ -1,5 +1,5 @@
 name: Avisos-FAB
-run-name: ${{ github.actor }} executando...
+run-name: ${{ github.actor }} - Avisos-FAB
 
 on:
   workflow_dispatch:
