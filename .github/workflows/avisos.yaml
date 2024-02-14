@@ -1,4 +1,5 @@
-name: avisos-fab
+name: Avisos-FAB
+run-name: ${{ github.actor }} executando...
 
 on:
   workflow_dispatch:
@@ -30,8 +31,16 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install pip install -r requirements.txt
+
+      - name: Edit .env file
         env:
           EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+        run: |
+          touch .env
+          echo EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }} >> .env
 
       - name: executar arquivo principal
         run: python main.py
+
+      - name: apagando arquivo .env
+        run: rm .env

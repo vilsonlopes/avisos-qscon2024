@@ -35,7 +35,6 @@ def send_mail():
     try:
         with smtplib.SMTP_SSL('smtp.gmail.com', 465) as server:
             server.login(email_address, email_password)
-            # server.send_message(msg)
             server.send_message(msg)
     except Exception as e:
         print(f'Erro ao enviar {e}')
