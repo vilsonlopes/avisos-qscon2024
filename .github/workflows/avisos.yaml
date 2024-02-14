@@ -4,8 +4,8 @@ run-name: ${{ github.actor }} - Avisos-FAB
 on:
   workflow_dispatch:
    schedule:
-#     - cron: '0 13 * * *'
-     - cron:
+     - cron: '0 19 * * *'
+#     - cron:
 
 jobs:
   run_schedule:

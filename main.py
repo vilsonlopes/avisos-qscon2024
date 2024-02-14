@@ -18,7 +18,7 @@ driver.implicitly_wait(80)  # seconds
 driver.get(url)
 # driver.maximize_window()
 
-patterns = """05/02/2024 RelaçãO complementar de voluntários FALTOSOS à entrega de Requerimento de Recurso para Etapa Validação Dcoumental (VD)"""
+patterns = """05/02/2024 Relação complementar de voluntários FALTOSOS à entrega de Requerimento de Recurso para Etapa Validação Dcoumental (VD)"""
 
 qscon2024 = driver.find_element(By.ID, "convocacao-recentes")
 
