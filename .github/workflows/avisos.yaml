@@ -3,7 +3,8 @@ run-name: ${{ github.actor }} - Avisos-FAB
 
 on:
   schedule:
-    - cron:  '30 5,17 * * *'
+    - cron:  '30 5,16 * * *'
+    - cron:  '30 5,21 * * *'
 
 jobs:
   run_schedule:
