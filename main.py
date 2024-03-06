@@ -18,7 +18,7 @@ driver.implicitly_wait(80)  # seconds
 driver.get(url)
 # driver.maximize_window()
 
-patterns = """23/02/2024 CUMPRIMENTO DE DECISÃO JUDICIAL - MILENA VERAS GOMES"""
+patterns = """06/03/2024 CUMPRIMENTO DE DECISÃO JUDICIAL - BRUNA DURÃES GOMES"""
 
 qscon2024 = driver.find_element(By.ID, "convocacao-recentes")
 
@@ -49,6 +49,8 @@ avisos = driver.find_element(By.ID, "tableLista")
 avisos_todo = avisos.find_element(By.TAG_NAME, "tbody")
 
 avisos_one = avisos_todo.find_element(By.TAG_NAME, "tr")
+
+# print(avisos_one.text)
 
 if patterns != avisos_one.text:
     send_mail()
