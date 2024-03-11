@@ -18,7 +18,7 @@ driver.implicitly_wait(80)  # seconds
 driver.get(url)
 # driver.maximize_window()
 
-patterns = """06/03/2024 CUMPRIMENTO DE DECISÃO JUDICIAL - BRUNA DURÃES GOMES"""
+patterns = """11/03/2024 Relação Nominal dos voluntários SUSPENSOS do Processo Seletivo (em conformidade com item 5.5.15 do AVICON - QSCon 2024))"""
 
 qscon2024 = driver.find_element(By.ID, "convocacao-recentes")
 
