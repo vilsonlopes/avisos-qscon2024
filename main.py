@@ -18,7 +18,7 @@ driver.implicitly_wait(80)  # seconds
 driver.get(url)
 # driver.maximize_window()
 
-patterns = """20/03/2024 ERRATA - CUMPRIMENTO DE DECISÃO JUDICIAL - BRUNA DURÃES GOMES"""
+patterns = """22/03/2024 CUMPRIMENTO DE DECISÃO JUDICIAL - CONVOCAÇÃO DE VOLUNTÁRIA PARA INSPEÇÃO DE SAÚDE (INSPSAU) - BRUNA DURAES GOMES"""
 
 qscon2024 = driver.find_element(By.ID, "convocacao-recentes")
 
