@@ -1,4 +1,3 @@
-
 import time
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -12,13 +11,13 @@ url = "https://www.convocacaotemporarios.fab.mil.br/candidato/index.php"
 
 # Configurações iniciais
 option = Options()
-option.headless = False   # Deixar true em produção
+option.headless = True   # Deixar true em produção
 driver = webdriver.Firefox(options=option)
 driver.implicitly_wait(80)  # seconds
 driver.get(url)
 # driver.maximize_window()
 
-patterns = """04/04/2024 Relação nominal complementar de voluntários NÃO APTOS à INSPSAU - VOLUNTÁRIA BRUNA DURAES GOMES"""
+patterns = """11/04/2024 Relação Nominal dos voluntários convocados para a realização do TACF, com as respectivas datas e locais de apresentação."""
 
 qscon2024 = driver.find_element(By.ID, "convocacao-recentes")
 
