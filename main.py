@@ -17,7 +17,7 @@ driver.implicitly_wait(80)  # seconds
 driver.get(url)
 # driver.maximize_window()
 
-patterns = """12/04/2024 Convocação de voluntário para INSPSAU em Grau de Recurso - Voluntária BRUNA DURAES GOMES"""
+patterns = """22/04/2024 Divulgação da Relação dos voluntários para a realização do TACF em grau de recurso, com o respectivo local e horário"""
 
 qscon2024 = driver.find_element(By.ID, "convocacao-recentes")
 
