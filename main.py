@@ -17,7 +17,7 @@ driver.implicitly_wait(80)  # seconds
 driver.get(url)
 # driver.maximize_window()
 
-patterns = """22/04/2024 Divulgação da Relação dos voluntários para a realização do TACF em grau de recurso, com o respectivo local e horário"""
+patterns = """26/04/2024 Divulgação da relação nominal de voluntários com os resultados obtidos no TACF, em grau de recurso"""
 
 qscon2024 = driver.find_element(By.ID, "convocacao-recentes")
 
