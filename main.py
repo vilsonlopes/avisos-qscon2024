@@ -17,7 +17,7 @@ driver.implicitly_wait(80)  # seconds
 driver.get(url)
 # driver.maximize_window()
 
-patterns = """26/04/2024 Divulgação da relação nominal de voluntários com os resultados obtidos no TACF, em grau de recurso"""
+patterns = """30/04/2024 Divulgação da relação nominal complementar dos voluntários convocados para a realização do TACF, com as respectivas datas e locais de apresentação - VOLUNTÁRIA BRUNA DURÃES GOMES"""
 
 qscon2024 = driver.find_element(By.ID, "convocacao-recentes")
 
