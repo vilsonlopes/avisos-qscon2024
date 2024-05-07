@@ -17,7 +17,7 @@ driver.implicitly_wait(80)  # seconds
 driver.get(url)
 # driver.maximize_window()
 
-patterns = """03/05/2024 Divulgação das relações nominais dos voluntários convocados para a CONCENTRAÇÃO FINAL e HABILITAÇÃO À INCORPORAÇÃO (CF)"""
+patterns = """07/05/2024 Divulgação da relação nominal complementar dos voluntários convocados para a CONCENTRAÇÃO FINAL e HABILITAÇÃO À INCORPORAÇÃO (CF) - VOLUNTÁRIA BRUNA DURÃES GOMES"""
 
 qscon2024 = driver.find_element(By.ID, "convocacao-recentes")
 
