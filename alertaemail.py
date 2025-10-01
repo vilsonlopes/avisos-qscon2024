@@ -15,7 +15,7 @@ def send_mail():
     contacts = ["vilsonlopes@yahoo.com.br"]
 
     msg = EmailMessage()
-    msg['Subject'] = "QSCON 2024"
+    msg['Subject'] = "QOCON Tec 2025/2026 - Mudança nos avisos"
     msg['From'] = email_address
     msg['To'] = ','.join(contacts)
 
@@ -24,7 +24,7 @@ def send_mail():
     # The HTML body of the email.
     body_html = """
     <h1>Atenção!</h1>
-    <p>Houve mudanças nos avisos do QSCON 2024. Entre no site para ver.</p><br>
+    <p>Houve mudanças nos avisos do QOCON Tec 2025/2026. Entre no site para ver.</p><br>
     <a href="https://www.convocacaotemporarios.fab.mil.br/candidato/index.php">SITE FAB</a>
     """
 
