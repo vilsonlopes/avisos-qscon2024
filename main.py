@@ -23,9 +23,8 @@ from alertaemail import send_mail
 # =========================
 URL = "https://www.convocacaotemporarios.fab.mil.br/candidato/index.php"
 
-# Perfil persistente
-CHROME_USER_DATA_DIR = r"C:\workspace\chrome_selenium_profile"
-CHROME_PROFILE_DIR = "Default"
+# Perfil persistente (use uma pasta só do robô)
+CHROME_USER_DATA_DIR = r"C:\workspace\chrome_selenium_profile"  # SEM profile_dir
 
 # Cookies (opcional)
 USAR_COOKIES = True
@@ -34,7 +33,7 @@ COOKIES_ARQ = Path(__file__).with_name("cookies.pkl")
 # Headless (True = sem janela; False = janela visível)
 HEADLESS = False
 
-# Retry inicial (em caso de falha no start)
+# Retry inicial (em caso de falha no start / rede lenta)
 RETRIES = 3
 BACKOFF_SECS = 10
 
@@ -105,30 +104,32 @@ def safe_click(driver, element):
     driver.execute_script("arguments[0].scrollIntoView({block:'center', inline:'center'});", element)
     time.sleep(0.4)
     try:
-        element.click()
-        return
+        element.click(); return
     except ElementClickInterceptedException:
         pass
     try:
-        ActionChains(driver).move_to_element_with_offset(element, 0, -10).click().perform()
-        return
+        ActionChains(driver).move_to_element_with_offset(element, 0, -10).click().perform(); return
     except Exception:
         pass
     try:
         driver.execute_script("document.querySelectorAll('footer, .footer, #footer').forEach(el=>el.style.display='none');")
         time.sleep(0.2)
-        element.click()
-        return
+        element.click(); return
     except Exception:
         driver.execute_script("arguments[0].click();", element)
 
 def build_driver():
+    # >>> Sem profile_dir; apenas user_data_dir (perfil persistente "Default" dentro da pasta)
     driver = Driver(
         uc=True,
         browser="chrome",
         headless=HEADLESS,
         user_data_dir=CHROME_USER_DATA_DIR,
-        profile_dir=CHROME_PROFILE_DIR,
+        # argumentos úteis de estabilidade
+        no_sandbox=True,
+        disable_gpu=True,
+        disable_dev_shm_usage=True,
+        # detach=False é padrão; o SeleniumBase fecha junto com quit()
     )
     driver.implicitly_wait(30)
     return driver
