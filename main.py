@@ -1,4 +1,4 @@
-# monitor_qscon.py
+# main.py
 # -*- coding: utf-8 -*-
 import os
 import time
@@ -11,10 +11,10 @@ from pathlib import Path
 from contextlib import suppress
 from datetime import datetime
 
+import undetected_chromedriver as uc
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import ElementClickInterceptedException
 from selenium.webdriver.common.action_chains import ActionChains
-from seleniumbase import Driver
 
 from alertaemail import send_mail
 
@@ -23,21 +23,21 @@ from alertaemail import send_mail
 # =========================
 URL = "https://www.convocacaotemporarios.fab.mil.br/candidato/index.php"
 
-# Perfil persistente (use uma pasta só do robô)
-CHROME_USER_DATA_DIR = r"C:\workspace\chrome_selenium_profile"  # SEM profile_dir
+# Perfil persistente (use uma pasta dedicada só para o robô)
+CHROME_USER_DATA_DIR = r"C:\workspace\chrome_selenium_profile"  # cria se não existir
 
 # Cookies (opcional)
 USAR_COOKIES = True
 COOKIES_ARQ = Path(__file__).with_name("cookies.pkl")
 
 # Headless (True = sem janela; False = janela visível)
-HEADLESS = False
+HEADLESS = False  # em sites com proteção forte, prefira False
 
-# Retry inicial (em caso de falha no start / rede lenta)
+# Retry para start do browser (útil com Agendador logo após boot)
 RETRIES = 3
 BACKOFF_SECS = 10
 
-# Lock file
+# Lock file para evitar instância concorrente
 LOCK_FILE = Path(tempfile.gettempdir()) / "qscon_monitor.lock"
 
 # SQLite
@@ -57,6 +57,7 @@ CREATE INDEX IF NOT EXISTS idx_aviso_chave ON avisos(chave);
 # =========================
 
 def single_instance_lock():
+    """Evita instâncias duplicadas; sobrescreve lock antigo se houver."""
     try:
         LOCK_FILE.write_text(str(os.getpid()), encoding="utf-8")
     except Exception as e:
@@ -68,6 +69,7 @@ def release_lock():
             LOCK_FILE.unlink()
 
 def kill_orphans():
+    """Mata processos remanescentes (Windows)."""
     if os.name == "nt":
         with suppress(Exception):
             subprocess.run(["taskkill", "/IM", "chromedriver.exe", "/F", "/T"],
@@ -119,21 +121,27 @@ def safe_click(driver, element):
         driver.execute_script("arguments[0].click();", element)
 
 def build_driver():
-    # Apenas opções válidas para SeleniumBase Driver()
-    driver = Driver(
-        uc=True,
-        browser="chrome",
-        headless=HEADLESS,
-        user_data_dir=CHROME_USER_DATA_DIR,
-        chromium_args=[
-            "--no-sandbox",
-            "--disable-dev-shm-usage",
-            "--disable-gpu",
-            "--disable-extensions",
-            "--disable-software-rasterizer",
-            "--disable-notifications",
-        ]
-    )
+    """
+    Inicia Chrome com undetected_chromedriver (uc) e perfil persistente.
+    """
+    # Opções do Chrome
+    options = uc.ChromeOptions()
+    options.add_argument(f"--user-data-dir={CHROME_USER_DATA_DIR}")
+    options.add_argument("--no-first-run")
+    options.add_argument("--no-default-browser-check")
+    options.add_argument("--disable-extensions")
+    options.add_argument("--disable-notifications")
+    options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--disable-gpu")
+    # Em servidores / ambientes restritos, ajuda:
+    options.add_argument("--no-sandbox")
+
+    if HEADLESS:
+        # Headless novo; alguns desafios anti-bot detectam headless
+        options.add_argument("--headless=new")
+
+    # Inicia o UC; ele gerencia o chromedriver automaticamente
+    driver = uc.Chrome(options=options)
     driver.implicitly_wait(30)
     return driver
 
@@ -141,9 +149,10 @@ def carregar_cookies(driver):
     if not (USAR_COOKIES and COOKIES_ARQ.exists()):
         return
     try:
-        driver.get(URL)
+        driver.get(URL)  # precisa estar no domínio para add_cookie
         cookies = pickle.load(open(COOKIES_ARQ, "rb"))
         for c in cookies:
+            # Alguns cookies podem precisar de ajustes de 'domain'/'path'
             driver.add_cookie(c)
         driver.get(URL)
         print("[INFO] Cookies restaurados.")
@@ -202,7 +211,11 @@ def main():
     atexit.register(release_lock)
     atexit.register(kill_orphans)
 
+    # Garante que a pasta do perfil exista
+    Path(CHROME_USER_DATA_DIR).mkdir(parents=True, exist_ok=True)
+
     db_init()
+
     tentativas = 0
     while True:
         try:
