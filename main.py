@@ -119,17 +119,20 @@ def safe_click(driver, element):
         driver.execute_script("arguments[0].click();", element)
 
 def build_driver():
-    # >>> Sem profile_dir; apenas user_data_dir (perfil persistente "Default" dentro da pasta)
+    # Apenas opções válidas para SeleniumBase Driver()
     driver = Driver(
         uc=True,
         browser="chrome",
         headless=HEADLESS,
         user_data_dir=CHROME_USER_DATA_DIR,
-        # argumentos úteis de estabilidade
-        no_sandbox=True,
-        disable_gpu=True,
-        disable_dev_shm_usage=True,
-        # detach=False é padrão; o SeleniumBase fecha junto com quit()
+        chromium_args=[
+            "--no-sandbox",
+            "--disable-dev-shm-usage",
+            "--disable-gpu",
+            "--disable-extensions",
+            "--disable-software-rasterizer",
+            "--disable-notifications",
+        ]
     )
     driver.implicitly_wait(30)
     return driver
