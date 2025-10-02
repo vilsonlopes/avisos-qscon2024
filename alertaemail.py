@@ -12,7 +12,7 @@ def send_mail():
     email_address = 'buscadorcaixa@gmail.com'
     email_password = os.getenv('EMAIL_PASSWORD')
 
-    contacts = ["vilsonlopes@yahoo.com.br"]
+    contacts = ["vilsonlopes@yahoo.com.br", "hefrayn.eu@gmail.com"]
 
     msg = EmailMessage()
     msg['Subject'] = "QOCON Tec 2025/2026 - Mudança nos avisos"
