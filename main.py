@@ -199,8 +199,7 @@ def fluxo(driver):
         print("Inicializado: aviso salvo no banco.")
     else:
         if ultimo != texto_atual:
-            send_mail("[QOCon] Novo aviso em Brasília",
-                      f"Anterior:\n{ultimo}\n\nAtual:\n{texto_atual}")
+            send_mail()
             db_save_text(chave, texto_atual)
             print("Novo aviso detectado, e-mail enviado.")
         else:
