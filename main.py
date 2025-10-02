@@ -83,12 +83,12 @@ driver = Driver(
     uc=True,
     browser="chrome",
     headless=False,      # mantenha visível enquanto estabiliza
-    headless2=False,
-    incognito=True,
-    no_sandbox=True,
-    do_not_track=True,
-    block_images=False,
-    page_load_strategy="normal",
+    # headless2=False,
+    # incognito=True,
+    # no_sandbox=True,
+    # do_not_track=True,
+    # block_images=False,
+    # page_load_strategy="normal",
 )
 driver.implicitly_wait(80)
 

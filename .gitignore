@@ -3,3 +3,6 @@
 .idea/
 __pycache__/
 .env.ci
+requirements.txt
+qscon_monitor.db
+downloaded_files/
