@@ -15,6 +15,7 @@ import undetected_chromedriver as uc
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import ElementClickInterceptedException
 from selenium.webdriver.common.action_chains import ActionChains
+from shutil import rmtree
 
 from alertaemail import send_mail
 
@@ -24,7 +25,7 @@ from alertaemail import send_mail
 URL = "https://www.convocacaotemporarios.fab.mil.br/candidato/index.php"
 
 # Perfil persistente (use uma pasta dedicada só para o robô)
-CHROME_USER_DATA_DIR = r"C:\workspace\chrome_selenium_profile"  # cria se não existir
+CHROME_USER_DATA_DIR = r"D:\avisos-qscon2024\chrome_profile"  # cria se não existir
 
 # Cookies (opcional)
 USAR_COOKIES = True
@@ -120,11 +121,29 @@ def safe_click(driver, element):
     except Exception:
         driver.execute_script("arguments[0].click();", element)
 
+def clean_profile_locks(profile_dir: str):
+    """Remove arquivos de lock que travam o Chrome quando reaproveita perfil."""
+    try:
+        p = Path(profile_dir)
+        # locks na raiz do user-data-dir
+        for name in ["SingletonCookie", "SingletonLock", "SingletonSocket"]:
+            f = p / name
+            if f.exists():
+                f.unlink(missing_ok=True)
+        # locks comuns dentro do 'Default'
+        d = p / "Default"
+        for name in ["SingletonCookie", "SingletonLock", "SingletonSocket"]:
+            f = d / name
+            if f.exists():
+                f.unlink(missing_ok=True)
+        # DevToolsActivePort residual (às vezes sobra em falha)
+        f = p / "DevToolsActivePort"
+        if f.exists():
+            f.unlink(missing_ok=True)
+    except Exception as e:
+        print(f"[WARN] Falha limpando locks: {e}")
+
 def build_driver():
-    """
-    Inicia Chrome com undetected_chromedriver (uc) e perfil persistente.
-    """
-    # Opções do Chrome
     options = uc.ChromeOptions()
     options.add_argument(f"--user-data-dir={CHROME_USER_DATA_DIR}")
     options.add_argument("--no-first-run")
@@ -133,15 +152,18 @@ def build_driver():
     options.add_argument("--disable-notifications")
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--disable-gpu")
-    # Em servidores / ambientes restritos, ajuda:
     options.add_argument("--no-sandbox")
+    options.add_argument("--remote-debugging-port=0")   # deixa o UC escolher porta livre
 
     if HEADLESS:
-        # Headless novo; alguns desafios anti-bot detectam headless
         options.add_argument("--headless=new")
 
-    # Inicia o UC; ele gerencia o chromedriver automaticamente
-    driver = uc.Chrome(options=options)
+    # >>> aponta para o Chrome instalado (evita usar um Chromium estranho)
+    chrome_exe = r"C:\Program Files\Google\Chrome\Application\chrome.exe"
+    if not Path(chrome_exe).exists():
+        chrome_exe = r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"
+
+    driver = uc.Chrome(options=options, browser_executable_path=chrome_exe)
     driver.implicitly_wait(30)
     return driver
 
@@ -218,6 +240,8 @@ def main():
     tentativas = 0
     while True:
         try:
+            Path(CHROME_USER_DATA_DIR).mkdir(parents=True, exist_ok=True)
+            clean_profile_locks(CHROME_USER_DATA_DIR)
             driver = build_driver()
             break
         except Exception as e:
