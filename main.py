@@ -158,12 +158,12 @@ def build_driver():
     if HEADLESS:
         options.add_argument("--headless=new")
 
-    # >>> aponta para o Chrome instalado (evita usar um Chromium estranho)
-    chrome_exe = r"C:\Program Files\Google\Chrome\Application\chrome.exe"
-    if not Path(chrome_exe).exists():
-        chrome_exe = r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"
+    # # >>> aponta para o Chrome instalado (evita usar um Chromium estranho)
+    # chrome_exe = r"C:\Program Files\Google\Chrome\Application\chrome.exe"
+    # if not Path(chrome_exe).exists():
+    #     chrome_exe = r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"
 
-    driver = uc.Chrome(options=options, browser_executable_path=chrome_exe)
+    driver = uc.Chrome(options=options)
     driver.implicitly_wait(30)
     return driver
 
